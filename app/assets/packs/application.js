@@ -8,6 +8,5 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import "stylesheets/application.css"
-import "./hello.jsx"
-
-console.log('Hello World from Webpacker')
+import "packs/checker"
+import "packs/user"

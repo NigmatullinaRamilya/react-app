@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Hello extends React.Component {
+class Checker extends React.Component {
   constructor(props) {
     super(props);
 
@@ -38,7 +38,7 @@ class Hello extends React.Component {
 
 // Render component with data
 document.addEventListener('DOMContentLoaded', () => {
-  const node = document.getElementById('hello')
+  const node = document.getElementById('checker')
 
-  ReactDOM.render(<Hello />, node)
+  ReactDOM.render(<Checker />, node)
 })
