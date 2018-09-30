@@ -9,4 +9,4 @@
 
 import "stylesheets/application.css"
 import "packs/checker"
-import "packs/user"
+import "packs/UsersIndex"

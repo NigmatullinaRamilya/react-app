@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import UserForm from './UserForm';
+import axios from 'axios';
 
-class User extends React.Component {
+class UsersIndex extends React.Component {
   constructor(props) {
     super(props);
 
@@ -25,17 +27,7 @@ class User extends React.Component {
           </tbody>
         </table>
 
-        <label>Id
-          <input type="text" id="id"/>
-        </label>
-        <br/>
-
-        <label>Name
-          <input type="text" id="name"/>
-        </label>
-        <br/>
-
-        <a href="#" onClick={this.handleClick}>Add row</a>
+        <UserForm />
       </div>
     );
   }
@@ -74,16 +66,22 @@ class User extends React.Component {
     return((e) => {
       e.preventDefault();
 
-      this.setState((prevState) => {
-        return { users: prevState.users.filter((user) => { return user !== deleteUser }) }
+      const this_ = this;
+
+      axios.delete('users/' + deleteUser.id, {
+        headers: { 'X-CSRF-TOKEN': this.getCsrfToken() }
+      })
+      .then(function (response) {
+        this_.setState((prevState) => {
+          return { users: prevState.users.filter((user) => { return user !== deleteUser }) }
+        });
       });
     });
   }
+
+  getCsrfToken() {
+    return document.querySelector("meta[name=csrf-token]").content;
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const node = document.getElementById('users');
-  const data = JSON.parse(node.getAttribute('data'))
-
-  ReactDOM.render(<User {...data}/>, node)
-})
+export default UsersIndex;
