@@ -2,17 +2,42 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import UserForm from './UserForm';
 import axios from 'axios';
+import Loader from 'react-loader-spinner'
 
 class UsersIndex extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
-    this.state = {
-      users: props.users
-    }
+    this.state = { };
+  }
+  componentDidMount() {
+    var users = this.getUsers();
   }
 
-  render() {
+  getUsers() {
+    const this_ = this;
+    axios.get('users.json', {
+      headers: { 'X-CSRF-TOKEN': this.getCsrfToken() }
+    })
+    .then(function (response) {
+      this_.setState({
+        users: response.data
+      });
+    });
+  }
+
+  renderSpiner() {
+    return(
+      <Loader
+         type="Puff"
+         color="#00BFFF"
+         height="100"
+         width="100"
+      />
+    );
+  }
+
+  renderUsers(users) {
     return(
       <div>
         <table>
@@ -30,6 +55,14 @@ class UsersIndex extends React.Component {
         <UserForm />
       </div>
     );
+  }
+
+  render() {
+    if (!this.state.users) {
+      return this.renderSpiner();
+    } else {
+      return this.renderUsers(this.state.users);
+    }
   }
 
   handleClick = (e) => {

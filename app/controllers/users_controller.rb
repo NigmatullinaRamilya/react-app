@@ -2,9 +2,15 @@ class UsersController < ApplicationController
   expose :users, -> { User.all }
   expose :user
 
-  respond_to :html
+  respond_to :html, :json
 
   def index
+    respond_to do |format|
+      format.html {}
+      format.json {
+        render json: users
+      }
+    end
   end
 
   def create
