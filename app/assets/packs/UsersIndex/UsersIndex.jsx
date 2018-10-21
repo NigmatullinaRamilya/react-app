@@ -88,7 +88,9 @@ class UsersIndex extends React.Component {
   }
 
   deleteUser = (deletedUser) => {
-    this.setState((prevState) => { users: prevState.users.filter((user) => user !== deletedUser) })
+    this.setState((prevState) => {
+      return { users: prevState.users.filter((user) => { return user !== deletedUser }) }
+    })
   }
 
   getCsrfToken() {
