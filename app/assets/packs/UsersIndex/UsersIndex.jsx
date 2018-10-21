@@ -52,7 +52,7 @@ class UsersIndex extends React.Component {
           </tbody>
         </table>
 
-        <UserForm />
+        <UserForm onAddUser={this.handleClick} />
       </div>
     );
   }
@@ -65,24 +65,12 @@ class UsersIndex extends React.Component {
     }
   }
 
-  handleClick = (e) => {
-    e.preventDefault();
-
-    var id = document.getElementById('id').value;
-    var name = document.getElementById('name').value;
-
+  handleClick = (user) => {
     this.setState((prevState) => {
       return {
-        users: [...prevState.users, {id: id, name: name}]
+        users: [...prevState.users, user]
       }
     });
-
-    this.clearInputs();
-  }
-
-  clearInputs() {
-    document.getElementById('id').value = "";
-    document.getElementById('name').value = "";
   }
 
   renderTableRow(user) {

@@ -14,9 +14,10 @@ class UsersController < ApplicationController
   end
 
   def create
+    # pry
     user.save
 
-    respond_with user, location: users_path
+    render json: user
   end
 
   def destroy
