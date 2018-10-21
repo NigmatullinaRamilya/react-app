@@ -44,7 +44,8 @@ class UsersIndex extends React.Component {
           <thead>
             <tr>
               <th>Id</th>
-              <th>Name</th>
+              <th style={{width:'150px'}}>Name</th>
+              <th style={{width:'60px'}} />
             </tr>
           </thead>
           <tbody>
@@ -74,13 +75,77 @@ class UsersIndex extends React.Component {
   }
 
   renderTableRow(user) {
+    if (user.state == "editing") {
+      return this.renderInput(user);
+    } else {
+      return this.renderUser(user);
+    }
+  }
+
+  renderInput(user) {
+    return(
+      <tr key={user.id}>
+        <td>{user.id}</td>
+        <td><input type="text" name="user[name]" id="user_name" defaultValue={user.name} /></td>
+        <td><input type="submit" onClick={this.saveUser.bind(this, user)} value="Update" /></td>
+        <td><a href="#" onClick={this.cancelEdit(user)}>cancel</a></td>
+      </tr>
+    )
+  }
+
+  renderUser(user) {
     return(
       <tr key={user.id}>
         <td>{user.id}</td>
         <td>{user.name}</td>
-        <td><a href="#" onClick={this.removeUser(user)}>remove user</a></td>
+        <td><a href="#" onClick={this.editUser(user)}>edit</a></td>
+        <td><a href="#" onClick={this.removeUser(user)}>remove</a></td>
       </tr>
     )
+  }
+
+  saveUser = (user, e) => {
+    e.preventDefault();
+
+    var name = document.getElementById('user_name').value;
+
+    const this_ = this;
+
+    axios.patch('users/' + user.id,
+      {
+        user: {
+          name: name
+        }
+      },
+      {
+        headers: { 'X-CSRF-TOKEN': this_.getCsrfToken() }
+      }
+    )
+    .then((response) => {
+      user.name = name;
+      user.state = null;
+      this_.setState((prevState) => {
+        return { users: prevState.users }
+      })
+    })
+  }
+
+  editUser(user) {
+    return((e) => {
+      user.state = "editing";
+      this.setState((prevState) => {
+        return { users: prevState.users }
+      })
+    })
+  }
+
+  cancelEdit(user) {
+    return((e) => {
+      user.state = null;
+      this.setState((prevState) => {
+        return { users: prevState.users }
+      })
+    })
   }
 
   removeUser(deleteUser) {

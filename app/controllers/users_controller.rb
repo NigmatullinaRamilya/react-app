@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  expose :users, -> { User.all }
+  expose :users, -> { User.all.order(:id) }
   expose :user
 
   respond_to :html, :json
@@ -14,8 +14,13 @@ class UsersController < ApplicationController
   end
 
   def create
-    # pry
     user.save
+
+    render json: user
+  end
+
+  def update
+    user.update(user_params)
 
     render json: user
   end
